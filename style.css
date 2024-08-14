@@ -1,0 +1,121 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    position: fixed;
+    background-color: lightgreen; /* Green color */
+    height: 40px;
+    align-items: center;
+    width: 100%;
+    z-index: 1;
+    padding: 0 20px;
+}
+.logo {
+    width: 200px; /* Adjust width as needed */
+    height: 200px; /* Adjust height as needed */
+    object-fit: contain; /* Ensure the image scales correctly */
+    margin-bottom: -20px; /* Adjust margin to create space below the logo */
+    /* If you need to move the image higher, consider adding a negative margin-top or adjusting other margins */
+    margin-top: 20px; /* Move the image higher */
+}
+
+
+nav h4{
+    margin: 0;
+}
+
+.welcome_img {
+    width: 100%;
+    height: 250px;
+}
+
+ul {
+    position: relative;
+    float: right;
+    margin-right: 20px;
+}
+
+ul li {
+    display: inline-block;
+    line-height: 70px;
+    margin: 0 5px;
+}
+
+ul li a {
+    text-decoration: none;
+    color: white; /* Text color */
+    font-size: 17px;
+}
+
+.form_deg {
+    padding-top: 300px;
+}
+
+.label_deg {
+    display: inline-block;
+    color: black; /* Green color */
+    width: 100px;
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.login_form {
+    background-color: white; /* Background color */
+    width: 300px;
+    padding-top: 20px;
+    padding-bottom: 80px;
+    margin: 0 auto; /* Center the form horizontally */
+    border: 2px solid black; /* Green outline */
+    border-radius: 8px; /* Optional: Rounded corners */
+}
+
+.title_deg {
+    background-color: lightgreen;
+    color: white; /* Text color */
+    text-align: center;
+    font-weight: bold;
+    width: 400px;
+    padding-top: 10px;
+    font-size: 20px;
+}
+
+.body_deg {
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+/* Ensure the form container is centered */
+form {
+    text-align: center; /* Center align form elements */
+}
+
+/* Styling for links container */
+/* Ensure the form container is centered */
+form {
+    text-align: center; /* Center align form elements */
+}
+
+/* Styling for links container within the form */
+.form-links {
+    text-align: left; /* Align links to the right */
+    width: 100%; /* Full width to align with form elements */
+    margin-top: 10px; /* Space above the links */
+    padding-left: 15px; /* Optional: Adjust space from the right */
+}
+
+/* Remove underline from links */
+.form-links a {
+    text-decoration: none; /* Remove underline */
+    color: black; /* Link color */
+    font-size: 14px; /* Adjust font size as needed */
+}
+
+/* Add hover effect to links for better user experience */
+.form-links a:hover {
+    color: darkgreen; /* Change color on hover */
+}

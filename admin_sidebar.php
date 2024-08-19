@@ -23,7 +23,7 @@
             <ul class="dropdown">
                 <li><a href="application.php">Applications</a></li>
                 <li><a href="pttform.php">PTT Form</a></li>
-                <li><a href="#">Manifest</a></li>
+                <li><a href="sermanifest.php">Manifest</a></li>
                 <li><a href="#">HW Inventory</a></li>
             </ul>
         </li>

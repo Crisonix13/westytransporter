@@ -1,17 +1,18 @@
 <?php
-error_reporting(0); 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['username']) || $_SESSION['usertype'] == 'LSD') {
     header("location:index.php");
-} elseif ($_SESSION['usertype'] == 'LSD') {
-    header("location:index.php");
+    exit();
 }
 
 $host = "localhost";
 $user = "root";
 $password = "";
-$db = "westyproject"; // Changed to the correct database name
+$db = "westyproject";
 
 // Create connection
 $data = mysqli_connect($host, $user, $password, $db);
@@ -20,32 +21,30 @@ if (!$data) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Fetch company names
-$sql = "SELECT company FROM appdata"; // Adjust the query if necessary
-$result = mysqli_query($data, $sql);
-
-$companies = [];
-if ($result) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $companies[] = $row['company'];
-    }
-}
-
-mysqli_close($data);
-
-// Return JSON response
-header('Content-Type: application/json');
-echo json_encode($companies);
-
 // Handle search query
 $searchQuery = '';
 if (isset($_POST['search'])) {
     $searchTerm = mysqli_real_escape_string($data, $_POST['search']);
-    $searchQuery = " WHERE app_num LIKE '%$searchTerm%' OR company LIKE '%$searchTerm%'"; 
+    $searchQuery = " WHERE app_num LIKE '%$searchTerm%' OR company LIKE '%$searchTerm%'";
 }
 
-$sql = "SELECT * FROM appdata" . $searchQuery;
-$result = mysqli_query($data, $sql);
+// Fetch company names
+$sqlCompanies = "SELECT company FROM appdata";
+$resultCompanies = mysqli_query($data, $sqlCompanies);
+
+$companies = [];
+if ($resultCompanies) {
+    while ($row = mysqli_fetch_assoc($resultCompanies)) {
+        $companies[] = $row['company'];
+    }
+}
+
+// Fetch data based on search query
+$sqlData = "SELECT * FROM appdata" . $searchQuery;
+$resultData = mysqli_query($data, $sqlData);
+
+mysqli_close($data);
+
 ?>
 
 <!DOCTYPE html>
@@ -55,43 +54,43 @@ $result = mysqli_query($data, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
     <link rel="stylesheet" type="text/css" href="admin.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <style type="text/css">
         .table_th {
             padding: 15px;
             font-size: 15px;
             text-align: center;
-            background-color: #f2f2f2; /* Background color for header */
+            background-color: #f2f2f2;
         }
         .table_td {
             padding: 10px;
             text-align: center;
-            vertical-align: middle; /* Center align vertically */
+            vertical-align: middle;
         }
         .btn-group {
             display: flex;
-            flex-wrap: wrap; /* Wrap buttons if they overflow */
+            flex-wrap: wrap;
             justify-content: center;
-            gap: 10px; /* Space between buttons */
+            gap: 10px;
         }
         .btn-group .btn {
-            margin: 5px; /* Space around each button */
+            margin: 5px;
         }
         .content {
-            margin-left: 250px; /* Adjust according to your sidebar width */
+            margin-left: 250px;
             padding: 20px;
         }
         table {
-            width: 100%; /* Make table full-width */
-            border-collapse: collapse; /* Collapse borders */
+            width: 100%;
+            border-collapse: collapse;
         }
         table, th, td {
-            border: 1px solid #ddd; /* Light border color */
+            border: 1px solid #ddd;
         }
         h1 {
-            text-align: center; /* Center-align the header */
+            text-align: center;
             margin-top: 20px;
         }
     </style>
@@ -100,10 +99,10 @@ $result = mysqli_query($data, $sql);
     <?php include 'admin_sidebar.php'; ?>
     <div class="content">
         <?php 
-        if ($_SESSION['message']) {
+        if (isset($_SESSION['message'])) {
             echo '<div class="alert alert-info" role="alert">' . $_SESSION['message'] . '</div>';
+            unset($_SESSION['message']);
         }
-        unset($_SESSION['message']);
         ?>
 
         <table>
@@ -120,7 +119,7 @@ $result = mysqli_query($data, $sql);
                     <a href="next_step.php?ID=<?php echo $info['ID']; ?>" class="btn btn-default">Next</a>
                 </th>
             </tr>
-            <?php while ($info = $result->fetch_assoc()) { ?>
+            <?php while ($info = $resultData->fetch_assoc()) { ?>
             <?php } ?>
         </table>
 
@@ -135,11 +134,11 @@ $result = mysqli_query($data, $sql);
     <script>
         async function loadCompanies() {
             try {
-                const response = await fetch('fetch_companies.php'); // Path to the PHP script
+                const response = await fetch('fetch_companies.php'); // Ensure this path is correct
                 const companies = await response.json();
 
                 const datalist = document.getElementById('datalistOptions');
-                datalist.innerHTML = ''; // Clear existing options
+                datalist.innerHTML = '';
 
                 companies.forEach(company => {
                     const option = document.createElement('option');
@@ -151,8 +150,7 @@ $result = mysqli_query($data, $sql);
             }
         }
 
-        window.onload = loadCompanies; // Load companies when the page loads
+        window.onload = loadCompanies;
     </script>
 </body>
 </html>
-

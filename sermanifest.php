@@ -34,8 +34,11 @@ $result = mysqli_query($data, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
     <link rel="stylesheet" type="text/css" href="admin.css">
+    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <style type="text/css">
         .table_th {
@@ -50,7 +53,7 @@ $result = mysqli_query($data, $sql);
 <body>
     <?php include 'admin_sidebar.php'; ?>
     <div class="content">
-        <a href="addclient.php" class="btn btn-primary" style="margin-left: 88%; margin-top: auto;">+ Add Client</a>
+        <a href="newman.php" class="btn btn-primary" style="margin-left: 88%; margin-top: auto;">+ New Manifest</a>
 
         <!-- Search Bar Form -->
         <form method="post" action="" class="form-inline" style="margin-top: 20px;">
@@ -71,14 +74,11 @@ $result = mysqli_query($data, $sql);
 
         <table border="1px">
             <tr>
-                <th class="table_th">Name</th>
-                <th class="table_th">Address</th>
-                <th class="table_th">Type of Establishment</th>
-                <th class="table_th">Contact Person</th>
-                <th class="table_th">Contact Number</th>
-                <th class="table_th">CRS ID</th>
-                <th class="table_th">HW ID</th>
-                <th class="table_th">Date Approved</th>
+                <th class="table_th">Application #</th>
+                <th class="table_th">Company</th>
+                <th class="table_th">Reference Code</th>
+                <th class="table_th">Approved Date</th>
+                <th class="table_th">Expiry Date</th>
                 <th class="table_th">Actions</th>
             </tr>
 
@@ -90,15 +90,10 @@ $result = mysqli_query($data, $sql);
                 <td class="table_td"><?php echo "{$info['address']}"; ?></td>
                 <td class="table_td"><?php echo "{$info['typeof_establishment']}"; ?></td>
                 <td class="table_td"><?php echo "{$info['contact_person']}"; ?></td>
-                <td class="table_td"><?php echo "{$info['contact_number']}"; ?></td>
-                <td class="table_td"><?php echo "{$info['crs_id']}"; ?></td>
-                <td class="table_td"><?php echo "{$info['hw_id']}"; ?></td>
                 <td class="table_td"><?php echo "{$info['date_approved']}"; ?></td>
                 <td class="table_td">
     <div class="btn-group">
-        <a href="client_details.php?ID=<?php echo $info['ID']; ?>" class="btn btn-info btn-sm">View Details</a>
-        <a href="delete.php?ID=<?php echo $info['ID']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Confirm Delete?');">Delete</a>
-        <a href="edit.php?ID=<?php echo $info['ID']; ?>" class="btn btn-success btn-sm">Update</a>
+        <a href="edit.php?ID=<?php echo $info['ID']; ?>" class="btn btn-primary btn-sm">Manage Manifest</a>
     </div>
 </td>
             </tr>
